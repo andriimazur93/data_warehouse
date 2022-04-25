@@ -6,7 +6,7 @@ from dao import get_target_connection
 from dw_job_run_summary import insert_into_job_run_summary
 
 
-def insert_into_locations(table_name):
+def insert_into_locations(table_name, job_run_id):
 
     start_time = datetime.now()
     rows_processed = 0
@@ -39,11 +39,11 @@ def insert_into_locations(table_name):
             print(error_message)
 
             insert_into_job_run_summary(table_name, start_time, end_time=datetime.now(), rows_processed=rows_processed, 
-                                        status=status, error_message=error_message, col_id=error_col_id, job_run_id=0)
+                                        status=status, error_message=error_message, col_id=error_col_id, job_run_id=job_run_id)
     
     if status == "Success":
         insert_into_job_run_summary(table_name, start_time, end_time=datetime.now(), rows_processed=rows_processed, 
-                                    status=status, error_message=error_message, col_id=error_col_id, job_run_id=0)
+                                    status=status, error_message=error_message, col_id=error_col_id, job_run_id=job_run_id)
         
     cnxt.commit()
     cursor.close()
