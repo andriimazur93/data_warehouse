@@ -1,4 +1,4 @@
-create table ODS_HR
+create table ods_hr
 (
 	id 					int IDENTITY(1,1) PRIMARY KEY
 	, employee_id 		int 
