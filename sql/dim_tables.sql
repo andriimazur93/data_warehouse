@@ -47,3 +47,20 @@ create table dim_jobs
     , created_on DATETIME2(3) DEFAULT GETDATE()
     , updated_on DATETIME2(3) DEFAULT GETDATE()
 )
+
+create table dim_date
+(
+    date_dim_key INT
+    , calendar_date varchar(10)
+    , month_id SMALLINT
+    , month_desc varchar(15)
+    , quarter_id SMALLINT
+    , quarter_desc varchar(6)
+    , year_id INT
+    , day_number_of_week SMALLINT
+    , day_of_week_desc VARCHAR(15)
+    , day_number_of_month SMALLINT
+    , day_number_of_year SMALLINT
+    , week_number_of_year SMALLINT
+    , year_month varchar(7)
+)
