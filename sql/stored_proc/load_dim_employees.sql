@@ -8,14 +8,14 @@ Begin
         , emp.last_name
         , emp.email
         , emp.phone_number
-        , emp.hire_date
+        , replace(cast(emp.hire_date as Date), '-', '') as hire_date
         from st_employees emp 
         where not EXISTS(
             select 1
             from dim_employees dim_emp
             where 
             dim_emp.employee_id = emp.employee_id
-            and dim_emp.hire_date = emp.hire_date
+            and dim_emp.hire_date = replace(cast(emp.hire_date as Date), '-', '')
         )
     End;
     Begin
@@ -33,10 +33,10 @@ Begin
             , emp.last_name
             , emp.email
             , emp.phone_number
-            , emp.hire_date
+            , replace(cast(emp.hire_date as Date), '-', '') as hire_date
             from st_employees emp 
         ) emp
         on dim_emp.employee_id = emp.employee_id
-        and dim_emp.hire_date = emp.hire_date
+        and dim_emp.hire_date = replace(cast(emp.hire_date as Date), '-', '')
     End;
 End;

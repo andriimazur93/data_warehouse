@@ -18,7 +18,7 @@ create table ods_hr
 	, country_name		varchar(50)	
 	, region_name		varchar(50)	
 	, salary		    Decimal(13,2) 
-	, commision_pct	    Decimal(5,2)
+	, commission_pct	    Decimal(5,2)
 	, created_on		DateTime2(3) DEFAULT getDate()
 	, updated_on		DateTime2(3) DEFAULT getDate()
 )

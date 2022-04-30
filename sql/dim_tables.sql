@@ -30,7 +30,21 @@ create table dim_employees
     , last_name varchar(60)
     , email varchar(60)
     , phone_number varchar(60)
-    , hire_date DATETIME2(3)
+    , hire_date int
+    , created_on DATETIME2(3) DEFAULT GETDATE()
+    , updated_on DATETIME2(3) DEFAULT GETDATE() 
+)
+
+
+create table dim_managers
+(
+    manager_dim_key int identity(1,1)
+    , manager_id int
+    , first_name varchar(60)
+    , last_name varchar(60)
+    , email varchar(60)
+    , phone_number varchar(60)
+    , hire_date int
     , created_on DATETIME2(3) DEFAULT GETDATE()
     , updated_on DATETIME2(3) DEFAULT GETDATE() 
 )
