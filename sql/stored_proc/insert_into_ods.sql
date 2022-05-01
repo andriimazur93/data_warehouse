@@ -42,7 +42,7 @@ Begin
                 emp.salary,
                 coalesce(emp.commission_pct, 0.0) as commission_pct
             from st_employees emp
-            LEFT JOIN st_departments dep
+            JOIN st_departments dep
                 on dep.department_id = emp.department_id 
             LEFT JOIN st_locations loc
                 on loc.location_id = dep.location_id
@@ -88,7 +88,7 @@ Begin
                         con.country_name,
                         reg.region_id
                     from st_employees emp
-                    LEFT JOIN st_departments dep
+                    JOIN st_departments dep
                         on dep.department_id = emp.department_id 
                     LEFT JOIN st_locations loc
                         on loc.location_id = dep.location_id

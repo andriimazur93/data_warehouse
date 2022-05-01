@@ -45,6 +45,7 @@ def get_job_run_id():
     return job_run_id
 
 def get_last_job_run_date(table_name):
+
     sql_query = f"""
         select cast(max(start_date_time) as date) as last_job_run_date
         from dw_job_run_summary
@@ -56,6 +57,8 @@ def get_last_job_run_date(table_name):
         )
         and tablename = '{table_name}'
         """
+
+
     print(sql_query)
     cnxt = get_target_connection()
     cursor = cnxt.cursor()
@@ -85,14 +88,33 @@ def truncate_table(table_name):
     cnxt.close()
 
 def fetch_records(table_name, last_job_run_date):
-    sql_query = f"""
-        select *
-        from {table_name}
-        where (
-            created_on >= DateAdd(dd, -3, '{last_job_run_date}')
-            or updated_on >= DateAdd(dd, -3, '{last_job_run_date}')
-        )
-    """
+    if table_name == 'employees':
+        sql_query = f"""
+            select *
+            from {table_name}
+            where (
+                created_on >= DateAdd(dd, -3, '{last_job_run_date}')
+                or updated_on >= DateAdd(dd, -3, '{last_job_run_date}')
+            )
+        """
+    elif table_name == 'departments':
+        sql_query = f"""
+            select * 
+            from departments 
+            where department_id in (
+                select department_id
+                from employees
+                where (
+                    created_on >= DateAdd(dd, -3, '{last_job_run_date}')
+                    or updated_on >= DateAdd(dd, -3, '{last_job_run_date}')
+                )
+            )
+        """
+    else:
+        sql_query = f"""
+            select *
+            from {table_name}
+        """
     print(sql_query)
     cnxn = get_source_connection()
     cursor = cnxn.cursor()
@@ -104,6 +126,23 @@ def fetch_records(table_name, last_job_run_date):
         hr_list.append([elem for elem in row])
 
     pd.DataFrame(hr_list, columns=header).to_csv(f"{table_name}.csv", index=False)
+
+    cursor.close()
+    cnxn.close()
+
+
+def execute_procedures():
+    cnxn = get_source_connection()
+    cursor = cnxn.cursor()
+    
+    sql_query = "exec dw.dbo.load_ods"
+    cursor.execute(sql_query)
+    
+    sql_query = "exec dw.dbo.load_dim_employees"
+    cursor.execute(sql_query)
+    
+    sql_query ="exec dw.dbo.load_fact_hr"
+    cursor.execute(sql_query)
 
     cursor.close()
     cnxn.close()
@@ -132,16 +171,21 @@ def insert_records(table_name, job_run_id):
                             status="Fail", error_message=str(e), col_id="", job_run_id=job_run_id)
 
 
-job_run_id = get_job_run_id()
-last_job_run_date = '2022-05-10'
+def main():
+    job_run_id = get_job_run_id()
 
-for table_name in target_tables:
-    try:
-        last_job_run_date = get_last_job_run_date(table_name)
-        fetch_records(table_name, last_job_run_date)
-        truncate_table(table_name)
-        insert_records(table_name, job_run_id)
-        print(table_name)
-    except Exception as e:
-        print(e)
+    for table_name in target_tables:
+        try:
+            last_job_run_date = get_last_job_run_date(table_name)
+            fetch_records(table_name, last_job_run_date)
+            truncate_table(table_name)
+            insert_records(table_name, job_run_id)
+            print(table_name)
+        except Exception as e:
+            print(e)
 
+    execute_procedures()
+
+
+if __name__ == "__main__":
+    main()
