@@ -6,7 +6,7 @@ from datetime import datetime
 from dao import get_target_connection
 
 
-def insert_into_employees(table_name, job_run_id):
+def insert_into_employees(df, table_name, job_run_id):
     
     start_time = datetime.now()
     rows_processed = 0
@@ -16,7 +16,7 @@ def insert_into_employees(table_name, job_run_id):
     
     cnxt = get_target_connection()
     cursor = cnxt.cursor()
-    df = pd.read_csv(f"{table_name}.csv")
+    # df = pd.read_csv(f"{table_name}.csv")
     df = df.fillna(np.nan).replace([np.nan], [None]) 
 
 

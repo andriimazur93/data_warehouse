@@ -6,7 +6,7 @@ from dao import get_target_connection
 from dw_job_run_summary import insert_into_job_run_summary
 
 
-def insert_into_jobs(table_name, job_run_id):
+def insert_into_jobs(df, table_name, job_run_id):
 
     start_time = datetime.now()
     rows_processed = 0
@@ -16,7 +16,7 @@ def insert_into_jobs(table_name, job_run_id):
 
     cnxt = get_target_connection()
     cursor = cnxt.cursor()
-    df = pd.read_csv(f"{table_name}.csv")
+    # df = pd.read_csv(f"{table_name}.csv")
     df = df.fillna(np.nan).replace([np.nan], [None]) 
 
     for index, row in df.iterrows():

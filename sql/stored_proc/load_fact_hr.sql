@@ -2,10 +2,25 @@ create or alter procedure load_fact_hr
 as
 Begin
 
-    select * into #ods
-    from ods_hr
+    select ods.* into #ods
+    from ods_hr ods
+    join st_employees st_emp
+    on st_emp.employee_id = ods.employee_id
+        and st_emp.hire_date = ods.start_date
+        and st_emp.department_id = ods.department_id
+        and st_emp.job_id = ods.job_id
 
-    truncate table fact_hr
+
+    -- truncate table fact_hr
+
+    delete fact
+    from fact_hr fact
+    join dim_employees dim_emp
+        on dim_emp.employees_dim_key = fact.employee_dim_key
+    join st_employees st_emp
+        on st_emp.employee_id = dim_emp.employee_id
+        and replace(cast(st_emp.hire_date as Date), '-', '')  = dim_emp.hire_date
+        
 
     insert into fact_hr(
         employee_dim_key

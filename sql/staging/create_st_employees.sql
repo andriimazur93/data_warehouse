@@ -10,7 +10,6 @@ CREATE TABLE st_employees (
 	commission_pct DECIMAL(2, 2),
 	manager_id INT ,
 	department_id INT,
-	created_date datetime default getdate(),
-    updated_date datetime null
+	created_on datetime default getdate(),
+    updated_on datetime default getdate()
 ) on [primary]
-go

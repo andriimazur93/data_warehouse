@@ -20,6 +20,8 @@ USE hr;
 CREATE TABLE regions (
 	region_id INT NOT NULL,
 	region_name VARCHAR(25),
+	created_on datetime default getdate(),
+    updated_on datetime default getdate()
 	PRIMARY KEY (region_id)
 	);
 
@@ -27,6 +29,9 @@ CREATE TABLE countries (
 	country_id CHAR(2) NOT NULL,
 	country_name VARCHAR(40),
 	region_id INT NOT NULL,
+	created_on datetime default getdate(),
+    updated_on datetime default getdate()
+	
 	PRIMARY KEY (country_id)
 );
 
@@ -37,6 +42,8 @@ CREATE TABLE locations (
 	city VARCHAR(30) NOT NULL,
 	state_province VARCHAR(25),
 	country_id CHAR(2) NOT NULL,
+	created_on datetime default getdate(),
+    updated_on datetime default getdate()
 	PRIMARY KEY (location_id)
 	);
 
@@ -45,6 +52,8 @@ CREATE TABLE departments (
 	department_name VARCHAR(30) NOT NULL,
 	manager_id INT,
 	location_id INT,
+	created_on datetime default getdate(),
+    updated_on datetime default getdate()
 	PRIMARY KEY (department_id)
 	);
 
@@ -53,6 +62,8 @@ CREATE TABLE jobs (
 	job_title VARCHAR(35) NOT NULL,
 	min_salary DECIMAL(8, 0),
 	max_salary DECIMAL(8, 0),
+	created_on datetime default getdate(),
+    updated_on datetime default getdate()
 	PRIMARY KEY (job_id)
 	);
 
@@ -68,6 +79,8 @@ CREATE TABLE employees (
 	commission_pct DECIMAL(2, 2),
 	manager_id INT,
 	department_id INT,
+	created_on datetime default getdate(),
+    updated_on datetime default getdate()
 	PRIMARY KEY (employee_id)
 	);
 
@@ -76,6 +89,8 @@ CREATE TABLE job_history (
 	start_date DATE NOT NULL,
 	end_date DATE NOT NULL,
 	job_id VARCHAR(10) NOT NULL,
-	department_id INT NOT NULL
+	department_id INT NOT NULL,
+	created_on datetime default getdate(),
+    updated_on datetime default getdate()
 	);
 GO
