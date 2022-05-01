@@ -137,12 +137,15 @@ def execute_procedures():
     
     sql_query = "exec dw.dbo.load_ods"
     cursor.execute(sql_query)
+    cnxn.commit()
     
     sql_query = "exec dw.dbo.load_dim_employees"
     cursor.execute(sql_query)
+    cnxn.commit()
     
     sql_query ="exec dw.dbo.load_fact_hr"
     cursor.execute(sql_query)
+    cnxn.commit()
 
     cursor.close()
     cnxn.close()
